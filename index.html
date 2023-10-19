@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="box">
+        <form>
+            <h2>Ingreso</h2>
+            <div class="inputBox">
+                <input type="text" id="usuario" required="required">
+                <span>Usuario</span>
+                <i></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="contrasena" required="required">
+                <span>Contraseña</span>
+                <i></i>
+            </div>
+            <div class="links">
+                <a href="contraseña.html">¿Olvidaste tu contraseña?</a>
+                <a href="registry.html">Registrarse</a>
+            </div>
+            <input type="submit" value="Ingresar">
+            <div id="mensaje-error" style="color: red;"></div> <!-- Mensaje de error -->
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Evita que se recargue la página por defecto al enviar el formulario
+            
+            const usuario = document.getElementById('usuario').value;
+            const contrasena = document.getElementById('contrasena').value;
+            
+            const data = {
+                usuario: usuario,
+                clave: contrasena
+            };
+
+            // Limpiar mensaje de error previo al enviar una nueva solicitud
+            const mensajeError = document.getElementById('mensaje-error');
+            mensajeError.textContent = '';
+
+            fetch('http://www.talentosyhabilidades.somee.com/Login/LoginColaborador', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // La solicitud fue exitosa (código de respuesta 200)
+                    // Puedes manejar la respuesta aquí
+                    response.text().then(data => {
+                        if (data === "acceso") {
+                            // Acceso permitido, almacena el nombre de usuario en localStorage
+                            localStorage.setItem('usuario', usuario);
+                            // Redirecciona a la página de perfil
+                            window.location.href = 'informacion.html';
+                        } else if (data === "Denegado") {
+                            // Acceso denegado, muestra un mensaje de error
+                            mensajeError.textContent = 'Contraseña incorrecta';
+                        }
+                    });
+                } else {
+                    // La solicitud no fue exitosa, maneja el error aquí
+                    console.error('Error al iniciar sesión');
+                }
+            })
+            .catch(error => {
+                console.error('Error de red:', error);
+            });
+        });
+    });
+    </script>
+</body>
+</html>

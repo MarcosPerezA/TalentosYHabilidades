@@ -1,0 +1,43 @@
+/* Estilos para la barra de navegación */
+.navbar {
+    background-color: hsl(195, 75%, 52%);
+    color: #fff;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar__list {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .navbar__item {
+    font-size: 16px;
+  }
+  
+  .navbar__item a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .navbar__item a:hover {
+    color: #ff6347;
+  }
+  
+  .filter {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .navbar__search input[type="text"],
+  .filter select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  

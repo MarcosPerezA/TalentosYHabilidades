@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Registro De Eventos</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link rel="stylesheet" href="formularioEvento.css" />
+    <script src="formularioEvento.js"></script>
+  </head>
+  <body>
+    <nav class="navbar">
+        <ul>
+          <li><a href="Informacion.html">Mi Perfil</a></li>
+          <li><a href="Prinicpal.html">Inicio</a></li>
+          <li><a href="recomendaciones.html">Recomendaciones</a></li>
+          <li><a href="eventos.html">Eventos</a></li>
+        </ul>
+      </nav>
+    <div class="container">
+      <h1 class="form-title" id="event-title">Registro</h1>
+      <form action="#">
+        <div class="main-user-info">
+          <div class="user-input-box">
+            <label for="fullName">Nombre Completo</label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              placeholder="Ingresa Tu Nombre Completo"
+            />
+          </div>
+          <div class="user-input-box">
+            <label for="email">Correo Electronico</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Ingresa tu Correo Electronico"
+            />
+          </div>
+          <div class="user-input-box">
+            <label for="phoneNumber">Numero De Telefono</label>
+            <input
+              type="text"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Ingresa Tu Numero De Telefono"
+              oninput="validatePhoneNumber(this)"
+            />
+          </div>
+        </div>
+        <div class="gender-details-box">
+          <span class="gender-title">Genero</span>
+          <div class="gender-category">
+            <input type="radio" name="gender" id="male" />
+            <label for="male">Hombre</label>
+            <input type="radio" name="gender" id="female" />
+            <label for="female">Mujer</label>
+          </div>
+        </div>
+        <div class="form-submit-btn">
+          <input type="submit" value="Registrarse Al Evento" />
+        </div>
+      </form>
+    </div>
+      
+  </body>
+</html>

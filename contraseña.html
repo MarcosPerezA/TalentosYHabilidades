@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="pwdstyle.css">
+</head>
+<body>
+    <div class="box">
+        <form> 
+            <h2>Ingresa Tu Correo</h2>
+            <div class="inputBox">
+                <input type="email" required="required" id="correo">
+                <span>Correo</span>
+                <i></i>
+            </div>  
+            <div class="buttons">
+                <button type="submit" class="btnsubmit">Enviar Correo</button>
+                <button onclick="location.href='index.html'" class="btnback">Regresar</button>
+            </div> 
+            <div id="mensaje-exito" style="color: red;"></div> <!-- Mensaje de error -->
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Evita que se recargue la página por defecto al enviar el formulario
+                
+                const correo = document.getElementById('correo').value;
+                
+                const data = {
+                    correoRecupera: correo
+                };
+    
+                // Limpiar mensaje de error previo al enviar una nueva solicitud
+                const mensajeExito = document.getElementById('mensaje-exito');
+                mensajeExito.textContent = '';
+    
+                fetch('https://localhost:7171/Contraseña/Recuperar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        mensajeExito.textContent = "Revisa Tu Correo"
+                    } else {
+                        // La solicitud no fue exitosa, maneja el error aquí
+                        mensajeExito.textContent = "Error al enviar el correo"
+                    }
+                })
+                .catch(error => {
+                    console.error('Error de red:', error);
+                });
+            });
+        });
+        </script>
+
+</body>
+</html>

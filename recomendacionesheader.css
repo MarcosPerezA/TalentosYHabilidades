@@ -1,0 +1,20 @@
+ /* Estilos para la barra de navegación */
+ .navbar {
+    background-color: hsl(211, 89%, 67%);
+    overflow: hidden;
+  }
+
+  .navbar a {
+    float: left; /* Hace que los elementos de navegación se muestren horizontalmente */
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 150px;
+    text-decoration: none;
+  }
+
+  .navbar a:hover {
+    background-color: #ddd; /* Cambia el color de fondo al pasar el mouse sobre los elementos de navegación */
+    color: black;
+  }
+

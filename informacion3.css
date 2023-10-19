@@ -1,0 +1,11 @@
+.Aptitudes ul#aptitudes-list {
+    list-style-type: disc; /* Usar disc para viñetas tipo círculo */
+    margin-left: 20px; /* Espacio entre la viñeta y el texto */
+    padding: 0;
+}
+
+.Aptitudes ul#aptitudes-list li {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+}

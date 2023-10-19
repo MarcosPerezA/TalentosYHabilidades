@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="regstyle.css">
+</head>
+<body>
+    <div class="box">
+        <form> 
+            <h2>Registrate</h2>
+            <div class="inputBox">
+                <input type="email" required="required" id="correo">
+                <span>Correo</span>
+                <i></i>
+            </div>
+            <div class="inputBox">
+                <input type="text" required="required" id="usuario">
+                <span>Usuario</span>
+                <i></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" required="required" id="contrasena">
+                <span>Contraseña</span>
+                <i></i>
+            </div>
+            <div class="links">
+                <a href="index.html">Ya tengo una cuenta</a>
+            </div>
+            <button type="submit">Registrarse</button>
+            <div id="mensaje-exito" style="color: red;"></div> <!-- Mensaje de error -->
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Evita que se recargue la página por defecto al enviar el formulario
+                
+                const usuario = document.getElementById('usuario').value;
+                const contrasena = document.getElementById('contrasena').value;
+                const correo = document.getElementById('correo').value;
+                
+                const data = {
+                    email: correo,
+                    usuario: usuario,
+                    clave: contrasena
+                };
+    
+                // Limpiar mensaje de error previo al enviar una nueva solicitud
+                const mensajeExito = document.getElementById('mensaje-exito');
+                mensajeExito.textContent = '';
+    
+                fetch('http://www.talentosyhabilidades.somee.com/RegistroColaboradores/Colaboradores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = 'index.html';
+                        mensajeExito.textContent = "Usuario Registrado Con Exito"
+                    } else {
+                        // La solicitud no fue exitosa, maneja el error aquí
+                        mensajeExito.textContent = "Error al registrar el usuario"
+                    }
+                })
+                .catch(error => {
+                    console.error('Error de red:', error);
+                });
+            });
+        });
+        </script>
+
+
+
+
+</body>
+</html>

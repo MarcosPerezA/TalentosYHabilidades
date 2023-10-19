@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css">
+    <link rel="stylesheet" href="informacion2.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <aside class="menu-lateral">
+        <ul>
+            <li><a href="Prinicpal.html">Inicio</a></li>
+            <li><a href="Informacion.html">Perfil</a></li>
+            <li><a href="recomendaciones.html">Recomendaciones</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+        </ul>
+    </aside>
+    <section class="seccion-perfil-usuario">
+        <div class="perfil-usuario-header">
+            <div class="perfil-usuario-portada">
+                <div class="perfil-usuario-avatar">
+                    <img src="" alt="img-avatar" id="imagen">
+                    <button type="button" class="boton-avatar" onclick="document.getElementById('fileInput').click();">
+                        <i class="far fa-image"></i>
+                    </button>
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(this)">                                      
+                </div>
+            </div>
+        </div>
+        <div class="perfil-usuario-body">
+            <div class="perfil-usuario-bio">
+                <h3 class="titulo" id="nombre" contenteditable="true">Nombre de Usuario</h3>
+                <h2 class ="puesto" id="oficio" contenteditable="true"></h2>
+                <p class="texto" id="descripcion" contenteditable="true">Descripción del usuario</p>
+            </div>
+            <div class="Aptitudes">
+                  <h2>Talentos y Habilidades</h2>
+            </div>
+            <div class="perfil-usuario-footer">
+                <ul class="lista-datos" id="aptitudes-list" contenteditable="true">
+                </ul>
+        </div>
+            <div class="redes-sociales">
+                <a href="" id="enlace-facebook" class="boton-redes facebook fab fa-facebook-f"><i class="icon-facebook"></i></a>
+                <a href="" id= "enlace-whatsapp"class="boton-redes whatsapp fab fa-whatsapp"><i class="icon-whatsapp"></i></a> 
+                <a href="" id="enlace-instagram" class="boton-redes instagram fab fa-instagram"><i class="icon-instagram"></i></a>
+            </div>
+        </div>
+    </section>
+    <button id="guardar-cambios" style="display: none;">Guardar Cambios</button>
+    <script>
+    function handleFileUpload(input) {
+    const file = input.files[0];
+    const usr = localStorage.getItem('usuario');
+
+    if (file) {
+        // Realiza la solicitud POST al endpoint deseado.
+        const endpoint = 'https://localhost:7171/Perfil/EditaPerfil';
+        const data = {
+                "Foto": file.name,
+                "aptitudes": "",
+                "descripcion": "",
+                "nombre": "",
+                "usuario": usr,
+                "puesto": ""
+        };
+
+        // Envia la solicitud POST usando Axios.
+        axios.post(endpoint, data)
+            .then(response => {
+                // Maneja la respuesta si es necesario.
+                console.log('Solicitud POST exitosa:', response.data);
+            })
+            .catch(error => {
+                // Maneja errores si es necesario.
+                console.error('Error al realizar la solicitud POST:', error);
+            });
+    }
+}
+
+// Agrega la función handleFileUpload a la carga del DOM.
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', function() {
+        handleFileUpload(this);
+    });
+});
+        var apiUrl = "http://www.talentosyhabilidades.somee.com/Perfil/RecuperaPerfil";
+        const usuario = localStorage.getItem('usuario');
+        var requestData = {
+            "usuario": usuario
+        };
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", apiUrl, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                var nombreElement = document.getElementById("nombre");
+                var descripcionElement = document.getElementById("descripcion");
+                var enlaceFacebook = document.getElementById("enlace-facebook");
+                var enlaceInstagram = document.getElementById("enlace-instagram");
+                var enlaceWhatsapp = document.getElementById("enlace-whatsapp");
+                var aptitudesList = document.getElementById("aptitudes-list");
+                var oficio = document.getElementById("oficio");
+                var imagen = document.getElementById("imagen");
+
+                if (data.length > 0) {
+                    nombreElement.textContent = data[0].Nombre;
+                    descripcionElement.textContent = data[0].Descripcion;
+                    enlaceFacebook.href = data[0].Facebook;
+                    enlaceInstagram.href = data[0].Instagram
+                    enlaceWhatsapp.href = data[0].Whatsapp
+                    oficio.textContent = data[0].Puesto;
+                    imagen.src = "/Fotos/"+data[0].Foto;
+                    // Obtén la cadena de aptitudes del objeto 'data'
+                    var aptitudes = data[0].Aptitudes;
+
+                    // Divide la cadena en un array usando el guion como separador
+                    var aptitudesArray = aptitudes.split('-').filter(Boolean);
+
+                    // Crea elementos de lista para cada aptitud
+                    aptitudesArray.forEach(function (aptitud) {
+                       var li = document.createElement("li");
+                     li.textContent = aptitud;
+                    aptitudesList.appendChild(li);
+                     });
+                }
+            }
+        };
+
+        xhr.send(JSON.stringify(requestData));
+
+        // Agregar eventos click a los campos de "Nombre" y "Descripción"
+        var nombreElement = document.getElementById("nombre");
+        var descripcionElement = document.getElementById("descripcion");
+
+        nombreElement.addEventListener("click", mostrarBotonGuardar);
+        descripcionElement.addEventListener("click", mostrarBotonGuardar);
+
+        function mostrarBotonGuardar() {
+            var guardarCambiosButton = document.getElementById("guardar-cambios");
+            guardarCambiosButton.style.display = "block";
+            // Desvincular los eventos click para evitar ocultar el botón cuando se hace clic en los campos nuevamente
+            nombreElement.removeEventListener("click", mostrarBotonGuardar);
+            descripcionElement.removeEventListener("click", mostrarBotonGuardar);
+        }
+
+        // Agregar evento click al botón "Guardar Cambios"
+        var guardarCambiosButton = document.getElementById("guardar-cambios");
+        guardarCambiosButton.addEventListener("click", guardarCambios);
+
+        function guardarCambios() {
+            var nuevoNombre = document.getElementById("nombre").textContent;
+            var nuevaDescripcion = document.getElementById("descripcion").textContent;
+            var puesto = document.getElementById("oficio").textContent;            
+                // Obtén la lista de aptitudes
+                var aptitudesList = document.getElementById("aptitudes-list");
+
+                // Obtén todos los elementos de la lista (etiqueta <li>)
+                var aptitudesItems = aptitudesList.getElementsByTagName("li");
+
+                // Crea un array para almacenar las aptitudes
+                var aptitudesArray = [];
+
+                // Recorre los elementos de la lista y agrega el texto de cada elemento al array
+                for (var i = 0; i < aptitudesItems.length; i++) {
+                 aptitudesArray.push(aptitudesItems[i].textContent);
+                }
+
+                // Combina las aptitudes en una cadena usando guiones como separadores
+                var aptitudesCadena = "-" + aptitudesArray.join(" -");
+
+            var datosActualizados = {
+                "foto": "",
+                "aptitudes": aptitudesCadena,
+                "descripcion": nuevaDescripcion,
+                "nombre": nuevoNombre,
+                "usuario": usuario,
+                "puesto": puesto
+            };
+
+            var xhrGuardar = new XMLHttpRequest();
+            xhrGuardar.open("POST", "http://www.talentosyhabilidades.somee.com/Perfil/EditaPerfil", true);
+            xhrGuardar.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+            xhrGuardar.onreadystatechange = function() {
+                if (xhrGuardar.readyState === 4 && xhrGuardar.status === 200) {
+                    // Manejar la respuesta del servidor si es necesario
+                    console.log("Cambios guardados con éxito.");
+                    // Volver a vincular los eventos click para permitir la edición nuevamente
+                    nombreElement.addEventListener("click", mostrarBotonGuardar);
+                    descripcionElement.addEventListener("click", mostrarBotonGuardar);
+                }
+            };
+
+            xhrGuardar.send(JSON.stringify(datosActualizados));
+        }
+
+    </script>
+</body>
+</html>

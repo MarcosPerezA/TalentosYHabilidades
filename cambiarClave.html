@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="CambiarClave.css">
+</head>
+<body>
+    <div class="box">
+        <form>
+            <h2>Cambiar Contraseña</h2>
+            <div class="inputBox">
+                <input type="text" id="correo" required="required">
+                <span>Correo</span>
+                <i></i>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="claveNueva" required="required">
+                <span>Contraseña Nueva</span>
+                <i></i>
+            </div>
+            <div class="links">
+                <!-- <a href="contraseña.html">¿Olvidaste tu contraseña?</a>
+                <a href="registry.html">Registrarse</a> -->
+            </div>
+            <input type="submit" value="Cambiar Contraseña">
+            <div id="mensaje-error" style="color: red;"></div> <!-- Mensaje de error -->
+            <div id="mensaje-exito" style="color: red;"></div> <!-- Mensaje de error -->
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Evita que se recargue la página por defecto al enviar el formulario
+            
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('claveNueva').value;
+            
+            const data = {
+                correo: correo,
+                clave: contrasena
+            };
+
+            // Limpiar mensaje de error previo al enviar una nueva solicitud
+            const mensajeError = document.getElementById('mensaje-error');
+            mensajeError.textContent = '';
+            const mensajeExito = document.getElementById('mensaje-exito');
+            mensajeExito.textContent = '';
+            fetch('http://www.talentosyhabilidades.somee.com/Contraseña/Cambiar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // La solicitud fue exitosa (código de respuesta 200)
+                    // Puedes manejar la respuesta aquí
+                    response.text().then(data => {
+                        if (data === "Exito") {
+                            // Acceso permitido, redirecciona a la página de bienvenida
+                            mensajeExito.textContent = 'Contraseña Cambiada Exitosamente';
+                        } else if (data === "Denegado") {
+                            // Acceso denegado, muestra un mensaje de error
+                            mensajeError.textContent = 'Tu Contraseña no puede ser la misma que tenias anteriormente';
+                        }
+                    });
+                } else {
+                    // La solicitud no fue exitosa, maneja el error aquí
+                    console.error('Error al cambiar la contraseña');
+                }
+            })
+            .catch(error => {
+                console.error('Error de red:', error);
+            });
+        });
+    });
+    </script>
+</body>
+</html>
